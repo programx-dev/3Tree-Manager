@@ -25,7 +25,7 @@ Node *AddChild(Node *parent, int value)
     if (!parent)
     {
         return NULL;
-    };
+    }
     Node *new_node = CreateNode(value);
     if (!new_node)
     {
@@ -58,9 +58,9 @@ void FreeMemory(Node *root)
     Node *child = root->first_child;
     while (child)
     {
-        Node *nextChild = child->next;
+        Node *next_child = child->next;
         FreeMemory(child);
-        child = nextChild;
+        child = next_child;
     }
 
     free(root);
