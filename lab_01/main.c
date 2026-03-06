@@ -3,35 +3,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h> // Нужно для проверки на пробельные символы, функция isspace
 #include "tree.h"
 #include "tree_service.h"
 
 /*
-Функция для очистки буфера ввода от непрочитанных символов.
+Функция для очистки буфера ввода.
 */
 void ClearInputBuffer()
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF)
-    {
-    };
+        ;
 }
 
 /*
-Добавление узла.
-Принимает указатель(2) на корень, чтобы была возможность изменения из функции.
+Функция строгого ввода.
+Читает целое число и проверяет, что после него нет мусора.
+Разрешает только пробельные символы, после целого числа.
+Значение, которое удалось считать записывает в перемнную по указателю.
+Возвращает true, если число введено корректно, и false, если строка невалидна.
 */
+bool GetSafeInt(int *result)
+{
+    // Если не удалось считать целое число
+    if (scanf("%d", result) != 1)
+    {
+        ClearInputBuffer(); // Очищаем мусор в буфере ввода
+        return false;
+    }
+
+    int next;
+    // Читаем все символы до конца строки, т.к. пробельные разрешены
+    while ((next = getchar()) != '\n' && next != EOF)
+    {
+        // Если попался непробельный символ
+        if (!isspace(next))
+        {
+            ClearInputBuffer();
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void MenuAddNode(Node **root)
 {
     int value, parent_value;
 
     if (*root == NULL)
     {
-        printf("Дерево пустое. Введите значение для корня: ");
-        if (scanf("%d", &value) != 1)
+        printf("Дерево пустое. Введите целое число для корня: ");
+        if (!GetSafeInt(&value))
         {
-            printf("Ошибка ввода.\n");
-            ClearInputBuffer();
+            printf("Ошибка: введено нецелое число или текст.\n");
             return;
         }
 
@@ -41,21 +67,21 @@ void MenuAddNode(Node **root)
             printf("Ошибка: не удалось создать корень.\n");
             return;
         }
-
-        printf("Корень создан.\n");
+        printf("Корень успешно создан.\n");
     }
     else
     {
         printf("Введите значение родителя: ");
-        if (scanf("%d", &parent_value) != 1)
+        if (!GetSafeInt(&parent_value))
         {
-            ClearInputBuffer();
+            printf("Ошибка: некорректное значение родителя.\n");
             return;
         }
+
         printf("Введите значение нового узла: ");
-        if (scanf("%d", &value) != 1)
+        if (!GetSafeInt(&value))
         {
-            ClearInputBuffer();
+            printf("Ошибка: некорректное значение нового узла.\n");
             return;
         }
 
@@ -70,7 +96,9 @@ void MenuAddNode(Node **root)
     }
 }
 
-// Печать дерева
+/*
+Обрамление для печати дерева.
+*/
 void MenuPrintTree(const Node *root)
 {
     if (!root)
@@ -83,7 +111,10 @@ void MenuPrintTree(const Node *root)
     printf("----------------------------\n");
 }
 
-// Удаление узла
+/*
+Меню удаления поддерева.
+При удалении всего дерева, значение по указателю перезаписывается.
+*/
 void MenuDeleteNode(Node **root)
 {
     if (!*root)
@@ -92,16 +123,17 @@ void MenuDeleteNode(Node **root)
         return;
     }
     int value;
+
     printf("Введите значение узла для удаления (вместе с поддеревом): ");
-    if (scanf("%d", &value) != 1)
+    if (!GetSafeInt(&value))
     {
-        ClearInputBuffer();
+        printf("Ошибка: введите целое число.\n");
         return;
     }
 
     if (DeleteSubtreeByValue(root, value))
     {
-        printf("Узел (вместе с поддеревом) успешно удален.\n");
+        printf("Узел успешно удален.\n");
     }
     else
     {
@@ -109,7 +141,9 @@ void MenuDeleteNode(Node **root)
     }
 }
 
-// 4. Получить степень дерева
+/*
+Обрамление для вывода степени дерева.
+*/
 void MenuGetDegree(const Node *root)
 {
     if (!root)
@@ -127,7 +161,7 @@ int main()
 
     printf("Добро пожаловать в программу работы с деревом!\n");
 
-    while (choice != 0)
+    while (true)
     {
         printf("\n------ ТЕКСТОВОЕ МЕНЮ ------\n");
         printf("1. Добавить узел\n");
@@ -138,12 +172,17 @@ int main()
         printf("----------------------------\n");
         printf("Выберите действие: ");
 
-        // Т.е если не удалось успешно записать одно значение в переменную
-        if (scanf("%d", &choice) != 1) 
+        if (!GetSafeInt(&choice))
         {
-            printf("Ошибка: введите число!\n");
-            ClearInputBuffer();
+            printf("Ошибка: выберите пункт меню (целое число)!\n");
             continue;
+        }
+
+        if (choice == 0)
+        {
+            printf("Завершение работы...\n");
+            DeleteSubtree(&root, root);
+            break;
         }
 
         switch (choice)
@@ -159,10 +198,6 @@ int main()
             break;
         case 4:
             MenuGetDegree(root);
-            break;
-        case 0:
-            printf("Завершение работы...\n");
-            DeleteSubtree(&root, root);
             break;
         default:
             printf("Неверный пункт меню.\n");
