@@ -1,8 +1,14 @@
+// tree.h
+
 #include "tree.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
 
+/*
+Создать узел с указанным значениием.
+Возвращает указатель на созданный узел.
+*/
 Node *CreateNode(int value)
 {
     Node *new_node = malloc(sizeof(*new_node));
@@ -20,6 +26,10 @@ Node *CreateNode(int value)
     return new_node;
 }
 
+/*
+Добавить к узлу нового ребенка, с указанным значением.
+Возвращает указатель на созданного ребенка.
+*/
 Node *AddChild(Node *parent, int value)
 {
     if (!parent)
@@ -48,6 +58,9 @@ Node *AddChild(Node *parent, int value)
     return new_node;
 }
 
+/*
+Рекурсивно освободить выделенную память поддерева.
+*/
 void FreeMemory(Node *root)
 {
     if (!root)
@@ -66,6 +79,11 @@ void FreeMemory(Node *root)
     free(root);
 }
 
+/*
+Удаляет поддерево, принимает указатель(2) на корень дерева и указатель на поддерево.
+При удалении всего дерева, в указатель записывается NULL.
+Возвращает true, если было успешно выполнено освобождение, иначе false.
+*/
 bool DeleteSubtree(Node **root, Node *target)
 {
     if (!root || !(*root) || !target)
@@ -77,6 +95,7 @@ bool DeleteSubtree(Node **root, Node *target)
 
     if (!is_root)
     {
+        // Отцепляем корень поддерева
         if (target->prev)
         {
             target->prev->next = target->next;

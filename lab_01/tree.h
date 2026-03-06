@@ -1,15 +1,18 @@
+// tree.h
+
 #pragma once
 
 #include <stdbool.h>
 
+// Структура узла
 typedef struct Node
 {
-    int value;
-    struct Node *first_child;
-    struct Node *last_child;
-    struct Node *next;
-    struct Node *prev;
-    struct Node *parent;
+    int value;                // Значение, является ключом
+    struct Node *first_child; // Указатель на самого левого ребенка
+    struct Node *last_child;  // Указатель на самого правого ребенка
+    struct Node *next;        // Указатель на следующего соседа
+    struct Node *prev;        // Указатель на предыдущего соседа
+    struct Node *parent;      // Указатель на родителья
 } Node;
 
 Node *CreateNode(int value);

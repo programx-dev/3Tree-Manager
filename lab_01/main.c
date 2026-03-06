@@ -1,18 +1,26 @@
+// main.c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "tree.h"
 #include "tree_service.h"
 
-// Функция для очистки буфера ввода
+/*
+Функция для очистки буфера ввода от непрочитанных символов.
+*/
 void ClearInputBuffer()
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF)
-        ;
+    {
+    };
 }
 
-// Добавление узла
+/*
+Добавление узла.
+Принимает указатель(2) на корень, чтобы была возможность изменения из функции.
+*/
 void MenuAddNode(Node **root)
 {
     int value, parent_value;
@@ -130,7 +138,8 @@ int main()
         printf("----------------------------\n");
         printf("Выберите действие: ");
 
-        if (scanf("%d", &choice) != 1)
+        // Т.е если не удалось успешно записать одно значение в переменную
+        if (scanf("%d", &choice) != 1) 
         {
             printf("Ошибка: введите число!\n");
             ClearInputBuffer();
