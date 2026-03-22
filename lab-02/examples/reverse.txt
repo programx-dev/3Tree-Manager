@@ -1,0 +1,16 @@
+(video.mp4 4194304)
+(script.sh 450)
+(readme.md 300)
+(prog.bin 65536)
+(notes.txt 800)
+(main.c 1240)
+(logs.txt 256)
+(index.html 4096)
+(image.png 15728)
+(docs.pdf 5120)
+(data.db 2097152)
+(config.cfg 1024)
+(backup.bak 524288)
+(archive.zip 1048576)
+video.mp4
+kaban.py

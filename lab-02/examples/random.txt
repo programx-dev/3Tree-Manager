@@ -1,0 +1,16 @@
+(main.c 1240)
+(archive.zip 1048576)
+(readme.md 300)
+(index.html 4096)
+(video.mp4 4194304)
+(config.cfg 1024)
+(logs.txt 256)
+(backup.bak 524288)
+(script.sh 450)
+(data.db 2097152)
+(image.png 15728)
+(prog.bin 65536)
+(docs.pdf 5120)
+(notes.txt 800)
+notes.txt
+kaban.py
