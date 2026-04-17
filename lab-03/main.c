@@ -883,10 +883,44 @@ void printInfix(Node *node, Node *parent, bool is_right_child)
     }
 }
 
-// TODO: ввод целой строки с консоли
+char *readLine() {
+    size_t allocated = 16;
+    size_t len = 0;
+    char *buff = malloc(allocated);
+    if (!buff) {
+        return NULL;
+    }
+    int c;
+    while (true) {
+        c = getc(stdin);
+        if (c == '\n' || c == EOF) {
+            break;
+        }
+        if (len + 1 >= allocated) {
+            allocated *= 2;
+            char *new_ptr = realloc(buff, allocated);
+
+            if (!new_ptr) {
+                free(buff);
+                return NULL;
+            }
+            buff = new_ptr;
+        }
+        buff[len] = (char)c;
+        len++;
+    }
+    buff[len] = '\0';
+    return buff;
+}
+
 int main()
 {
-    char input[] = "a / (b + c) - (-x) / y";
+    char *input = readLine();
+    if (!input) {
+        fprintf(stderr, "Read line error: out of memory.\n");
+        exit(1);
+    }
+
     printf("Input: %s\n", input);
 
     TokenNode *tokens = tokenizer(input);
